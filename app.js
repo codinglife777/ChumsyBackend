@@ -5,13 +5,15 @@ const cors = require("cors");
 const path = require('path');
 const bodyParser = require('body-parser')
 const userRouter = require('./routes/user');
+const eventsRouter = require('./routes/events');
 const chatRouter = require('./routes/chat');
 const User = require('./models/user');
 const app = express();
 
-app.use(express.json({limit: '50mb'}));
-app.use(express.urlencoded({limit: '50mb'}));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb' }));
 app.use('/api', userRouter);
+app.use('/api', eventsRouter);
 app.use('/chat', chatRouter);
 //app.use(userRouter);
 const http = require("http").Server(app);
@@ -27,6 +29,6 @@ app.get('/', (req, res) => {
   res.json({ success: true, message: 'Welcome to backend zone!' });
 });
 
-http.listen(8000,'192.168.159.1', () => {
+http.listen(8000, () => {
   console.log('port is listening');
 });
