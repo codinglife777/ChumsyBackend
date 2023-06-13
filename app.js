@@ -23,7 +23,7 @@ global.io = io;
 global.appRoot = path.resolve(__dirname);
 
 app.use(cors({ origin: '*' }));
-require('./controllers/socketController')(io);
+require('./controllers/socket')(io);
 // testing 
 app.get('/', (req, res) => {
   res.json({ success: true, message: 'Welcome to backend zone!' });
