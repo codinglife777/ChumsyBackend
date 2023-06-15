@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-const userSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
   first_name: {
     type: String,
   },
@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema({
   friends: { type: [] },
 });
 
-userSchema.pre('save', function (next) {
+UserSchema.pre('save', function (next) {
   if (this.isModified('password')) {
     bcrypt.hash(this.password, 8, (err, hash) => {
       if (err) return next(err);
@@ -48,7 +48,7 @@ userSchema.pre('save', function (next) {
   }
 });
 
-userSchema.methods.comparePassword = async function (password) {
+UserSchema.methods.comparePassword = async function (password) {
   if (!password) throw new Error('Password is missing, can not compare!');
 
   try {
@@ -59,7 +59,7 @@ userSchema.methods.comparePassword = async function (password) {
   }
 };
 
-userSchema.statics.isThisEmailInUse = async function (email) {
+UserSchema.statics.isThisEmailInUse = async function (email) {
   if (!email) throw new Error('Invalid Email');
   try {
     const user = await this.findOne({ email });
@@ -72,4 +72,4 @@ userSchema.statics.isThisEmailInUse = async function (email) {
   }
 };
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('users', UserSchema);
