@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const eventsSchema = mongoose.Schema({
+const EventsSchema = mongoose.Schema({
     id_user: {
         type: mongoose.Types.ObjectId,
     },
@@ -44,10 +44,10 @@ const eventsSchema = mongoose.Schema({
     }
 }, { timestamps: true });
 
-eventsSchema.virtual('id').get(() => this._id);
+EventsSchema.virtual('id').get(() => this._id);
 
-eventsSchema.set('toJSON', {
+EventsSchema.set('toJSON', {
     virtuals: true,
 });
 
-module.exports = mongoose.model("events", eventsSchema);
+module.exports = mongoose.model("events", EventsSchema);

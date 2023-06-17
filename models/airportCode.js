@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const airportCodeSchema = new mongoose.Schema({
+const AirportCodeSchema = new mongoose.Schema({
   code: {
     type: String,
     required: true,
@@ -11,4 +11,4 @@ const airportCodeSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('AirportCode', airportCodeSchema);
+module.exports = mongoose.model('AirportCode', AirportCodeSchema);

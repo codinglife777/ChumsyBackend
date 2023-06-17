@@ -4,8 +4,8 @@ const fs = require("fs");
 const pdfParse = require('pdf-parse');
 
 const pdfjs = require('pdfjs-dist');
-const AirportCode = require('../models/airportCode');
-const Schedule = require('../models/schedule');
+const AirportCode = require('../models/AirportCode');
+const Schedule = require('../models/Schedule');
 
 const router = express.Router();
 const {
@@ -22,7 +22,7 @@ const {
   addFriend,
   delFriend,
   signOut,
-} = require('../controllers/user');
+} = require('../controllers/UserController');
 const { isAuth } = require('../middlewares/auth');
 const {
   validateUserSignUp,
@@ -49,38 +49,38 @@ async function parsePDF(pdfPath, user_id) {
   let pageTextArr = [];
   let pdf_status = true;
   for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
-    if(pageNumber == 1){
+    if (pageNumber == 1) {
       const page = await pdf.getPage(pageNumber);
       const content = await page.getTextContent();
       pageTextArr = content.items.map(item => item.str);
     }
   };
-  if(pageTextArr.length < 10){
+  if (pageTextArr.length < 10) {
     pdf_status = false;
     return;
   }
   //get date (year and month)
   const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  let yearAndMonth_item = pageTextArr[pageTextArr.length-1];
+  let yearAndMonth_item = pageTextArr[pageTextArr.length - 1];
   const yearAndMonth_item_array = yearAndMonth_item.split(" ");
-  let year = yearAndMonth_item_array[yearAndMonth_item_array.length-1];
-  const month_str = yearAndMonth_item_array[yearAndMonth_item_array.length-2];
+  let year = yearAndMonth_item_array[yearAndMonth_item_array.length - 1];
+  const month_str = yearAndMonth_item_array[yearAndMonth_item_array.length - 2];
   let month = months.indexOf(month_str) + 1;
   //get schedule list
   const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
   const schedule_list_arr = [];
-  for (var i = 0; i < pageTextArr.length-5; i++) {
+  for (var i = 0; i < pageTextArr.length - 5; i++) {
     let item = pageTextArr[i];
-    if(item.length > 10){
-      if(item[item.length-1]=="]" && item[item.length-9]=="[" && item[item.length-5]=="-"){
-        if(pageTextArr[i+1].length==11){
-          if(pageTextArr[i+1][2]==":"){
-            if(pageTextArr[i+4].length==6){
-              if(pageTextArr[i+4][2]=="-"){
-                const days_arr = pageTextArr[i+4].split("-");
-                if(days.indexOf(days_arr[1]) > -1){
+    if (item.length > 10) {
+      if (item[item.length - 1] == "]" && item[item.length - 9] == "[" && item[item.length - 5] == "-") {
+        if (pageTextArr[i + 1].length == 11) {
+          if (pageTextArr[i + 1][2] == ":") {
+            if (pageTextArr[i + 4].length == 6) {
+              if (pageTextArr[i + 4][2] == "-") {
+                const days_arr = pageTextArr[i + 4].split("-");
+                if (days.indexOf(days_arr[1]) > -1) {
                   const pos_arr = pageTextArr[i].split(" ");
-                  const time_arr = pageTextArr[i+1].split("-");
+                  const time_arr = pageTextArr[i + 1].split("-");
                   const schedule_item_arr = [];
                   schedule_item_arr[0] = pos_arr[1].substr(1, 3);
                   schedule_item_arr[1] = pos_arr[1].substr(5, 3);
@@ -97,17 +97,17 @@ async function parsePDF(pdfPath, user_id) {
     }
   };
 
-  if(schedule_list_arr.length < 1) {
+  if (schedule_list_arr.length < 1) {
     return;
   }
   //make schedule data
   const airportCode = await AirportCode.find({});
   const airportCodeObj = {};
-  airportCode.map(item => {airportCodeObj[item.code] = item.location});
+  airportCode.map(item => { airportCodeObj[item.code] = item.location });
 
   let _month = String(month).padStart(2, '0');
-  for(var i = 0; i < schedule_list_arr.length-1; i++){
-    if(i % 2 == 0){
+  for (var i = 0; i < schedule_list_arr.length - 1; i++) {
+    if (i % 2 == 0) {
       let location_code = schedule_list_arr[i][1];
       let location = airportCodeObj[location_code];
       let day = schedule_list_arr[i][4];
@@ -115,11 +115,11 @@ async function parsePDF(pdfPath, user_id) {
       let from_str = `${day}/${_month}/${year}` + ' ' + strTime;
       let from = strToDate(from_str);
 
-      let day_to = schedule_list_arr[i+1][4];
-      let strTime_to = schedule_list_arr[i+1][2] + ':00';
+      let day_to = schedule_list_arr[i + 1][4];
+      let strTime_to = schedule_list_arr[i + 1][2] + ':00';
       let to_str = `${day_to}/${_month}/${year}` + ' ' + strTime_to;
-      if(day_to - day < 0){
-        to_str = `${day_to}/${String(month+1).padStart(2, '0')}/${year}` + ' ' + strTime_to;
+      if (day_to - day < 0) {
+        to_str = `${day_to}/${String(month + 1).padStart(2, '0')}/${year}` + ' ' + strTime_to;
       }
       let to = strToDate(to_str);
 
@@ -130,7 +130,7 @@ async function parsePDF(pdfPath, user_id) {
         to: to,
       });
       await schedule_row.save();
-      
+
       // console.log(location_code, location, from, to);
     }
   }
@@ -162,7 +162,7 @@ router.post("/upload-pdf", isAuth, upload.single('file'), async (req, res, next)
 
   parsePDF(pdfRead, req.user._id)
     .then(async () => {
-      const schedule = await Schedule.find({ user:req.user._id}).sort({from: 1 });
+      const schedule = await Schedule.find({ user: req.user._id }).sort({ from: 1 });
       // const schedule = await Schedule.find({ user:req.user._id, to: { $gte: new Date() }}).sort({from: 1 });
       res.json({ success: true, schedule: schedule, message: 'Upload Schedule successfully!' });
     })

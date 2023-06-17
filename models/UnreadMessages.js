@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const unreadMsgSchema = mongoose.Schema({
+const UnreadMsgSchema = mongoose.Schema({
     roomid: {
         type: String,
     },
@@ -16,10 +16,10 @@ const unreadMsgSchema = mongoose.Schema({
     }
 });
 
-unreadMsgSchema.virtual('id').get(() => this._id);
+UnreadMsgSchema.virtual('id').get(() => this._id);
 
-unreadMsgSchema.set('toJSON', {
+UnreadMsgSchema.set('toJSON', {
     virtuals: true,
 });
 
-module.exports = mongoose.model("unread_messages", unreadMsgSchema);
+module.exports = mongoose.model("unread_messages", UnreadMsgSchema);
