@@ -10,6 +10,7 @@ const postsRouter = require('./routes/posts');
 const faqsRouter = require('./routes/faqs');
 const reportRouter = require('./routes/report');
 const supportRouter = require('./routes/support');
+const requestsRouter = require('./routes/requests');
 
 const chatRouter = require('./routes/chat');
 const app = express();
@@ -23,6 +24,7 @@ app.use('/api', postsRouter);
 app.use('/api', faqsRouter);
 app.use('/api', reportRouter);
 app.use('/api', supportRouter);
+app.use('/api', requestsRouter);
 
 app.use('/chat', chatRouter);
 //app.use(userRouter);

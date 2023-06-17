@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const EventsSchema = mongoose.Schema({
-    id_user: {
+    user_id: {
         type: mongoose.Types.ObjectId,
     },
     category: Array,

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const SupportSchema = mongoose.Schema({
-    id_user: {
+    user_id: {
         type: mongoose.Types.ObjectId,
     },
     contents: {

@@ -16,7 +16,7 @@ exports.createReport = async (req, res) => {
   //// Create a Report => req.body
   const report = Report(req.body);
   // new Report({
-  //   id_user: req.body.id_user
+  //   user_id: req.body.user_id
   //   reported_user: req.body.reported_user
   //   contents: req.body.contents
   //   photo: req.body.photo

@@ -3,7 +3,7 @@ const Posts = require('../models/Posts');
 // Create and Save a new Post
 exports.createPost = async (req, res) => {
   // Validate request
-  if (!req.body.id_user) {
+  if (!req.body.user_id) {
     return res
       .status(400)
       .json(
@@ -16,7 +16,7 @@ exports.createPost = async (req, res) => {
   //// Create a Post => req.body
   const Post = Posts(req.body);
   // new Posts({
-  //   id_user: req.body.id_user,
+  //   user_id: req.body.user_id,
   //   photo_intro: req.body.photo_intro,
   //   photo: req.body.photo,
   //   is_shared: req.body.is_shared,
@@ -74,17 +74,17 @@ exports.getPost = async (req, res) => {
 
 // Get Posts by the userID
 exports.getUserPosts = async (req, res) => {
-  const id_user = req.params.id;
-  await Posts.find({ id_user: id_user })
+  const user_id = req.params.id;
+  await Posts.find({ user_id: user_id })
     .then(data => {
       if (!data)
-        res.status(404).send({ message: "Not found Post with userID  " + id_user });
+        res.status(404).send({ message: "Not found Posts with userID  " + user_id });
       else res.json({ successs: true, data: data });
     })
     .catch(err => {
       res
         .status(500)
-        .json({ success: false, message: "Error retrieving Post with userID =" + id_user });
+        .json({ success: false, message: "Error retrieving Post with userID =" + user_id });
     });
 }
 
@@ -184,7 +184,7 @@ exports.addRefCount = async (req, res) => {
       var isExist = false;
       if (dataType == 0) {
         // Validate request
-        if (!req.body.id_user) {
+        if (!req.body.user_id) {
           return res.json({
             success: false,
             message: "UserID can not be empty!"
@@ -193,7 +193,7 @@ exports.addRefCount = async (req, res) => {
 
         const len = data.likes_users.length;
         for (let i = 0; i < len; i++) {
-          if (data.likes_users[i] == req.body.id_user) {
+          if (data.likes_users[i] == req.body.user_id) {
             isExist = true;
             break;
           }
@@ -205,7 +205,7 @@ exports.addRefCount = async (req, res) => {
             message: "You have already accept for this Post!"
           });
         } else {
-          data.likes_users.push(req.body.id_user);
+          data.likes_users.push(req.body.user_id);
           data.save();
 
           res.json({
@@ -215,7 +215,7 @@ exports.addRefCount = async (req, res) => {
         }
       } else if (dataType == 1) {
         // Validate request
-        if (!req.body.id_user) {
+        if (!req.body.user_id) {
           return res.json({
             success: false,
             message: "UserID can not be empty!"
@@ -224,7 +224,7 @@ exports.addRefCount = async (req, res) => {
 
         const len = data.vote_users.length;
         for (let i = 0; i < len; i++) {
-          if (data.vote_users[i] == req.body.id_user) {
+          if (data.vote_users[i] == req.body.user_id) {
             isExist = true;
             break;
           }
@@ -236,7 +236,7 @@ exports.addRefCount = async (req, res) => {
             message: "You have already accept for this Post!"
           });
         } else {
-          data.vote_users.push(req.body.id_user);
+          data.vote_users.push(req.body.user_id);
           data.save();
 
           res.json({
@@ -254,7 +254,7 @@ exports.addRefCount = async (req, res) => {
         }
         const len = data.feed.length;
         for (let i = 0; i < len; i++) {
-          if (data.feed[i].id_user == req.body.id_user) {
+          if (data.feed[i].user_id == req.body.user_id) {
             isExist = true;
             break;
           }

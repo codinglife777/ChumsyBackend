@@ -3,7 +3,7 @@ const Events = require('../models/Events');
 // Create and Save a new Event
 exports.createEvent = async (req, res) => {
   // Validate request
-  if (!req.body.id_user) {
+  if (!req.body.user_id) {
     return res
       .status(400)
       .json(
@@ -16,7 +16,7 @@ exports.createEvent = async (req, res) => {
   //// Create a Event => req.body
   const Event = Events(req.body);
   // new Events({
-  //   id_user: req.body.id_user,
+  //   H: req.body.user_id,
   //   category: req.body.category,
   //   duration: req.body.duration,
   //   location: req.body.location,
@@ -81,17 +81,17 @@ exports.getEvent = async (req, res) => {
 
 // Get Events by the userID
 exports.getUserEvents = async (req, res) => {
-  const id_user = req.params.id;
-  await Events.find({ id_user: id_user })
+  const user_id = req.params.id;
+  await Events.find({ user_id: user_id })
     .then(data => {
       if (!data)
-        res.status(404).send({ message: "Not found Event with userID  " + id_user });
+        res.status(404).send({ message: "Not found Events with userID  " + user_id });
       else res.json({ successs: true, data: data });
     })
     .catch(err => {
       res
         .status(500)
-        .json({ success: false, message: "Error retrieving Event with userID =" + id_user });
+        .json({ success: false, message: "Error retrieving Event with userID =" + user_id });
     });
 }
 

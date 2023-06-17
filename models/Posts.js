@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const PostsSchema = mongoose.Schema({
-    id_user: {
+    user_id: {
         type: mongoose.Types.ObjectId,
     },
     photo_intro: {
@@ -16,7 +16,7 @@ const PostsSchema = mongoose.Schema({
     likes_users: { type: [] },
     vote_users: { type: [] },
     feed: [{
-        id_user: { type: mongoose.Types.ObjectId },
+        user_id: { type: mongoose.Types.ObjectId },
         content: { type: String }
     }]
 

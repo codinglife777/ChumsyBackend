@@ -16,7 +16,7 @@ exports.createSupport = async (req, res) => {
   //// Create a Support => req.body
   const support = Support(req.body);
   // new Support({
-  //   id_user: req.body.id_user
+  //   user_id: req.body.user_id
   //   contents: req.body.contents
   // });
 

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const ReportSchema = mongoose.Schema({
-    id_user: {
+    user_id: {
         type: mongoose.Types.ObjectId,
     },
     reported_user: {
