@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const MessageSchema = mongoose.Schema({
+const messageSchema = mongoose.Schema({
     roomid: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Room'
@@ -32,12 +32,12 @@ const MessageSchema = mongoose.Schema({
     }
 });
 
-MessageSchema.virtual('id').get(function () {
+messageSchema.virtual('id').get(function () {
     return this._id;
 });
 
-MessageSchema.set('toJSON', {
+messageSchema.set('toJSON', {
     virtuals: true,
 });
 
-module.exports = mongoose.model("messages", MessageSchema);
+module.exports = mongoose.model("messages", messageSchema);

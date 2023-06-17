@@ -2,7 +2,7 @@ const express = require('express');
 const { checkHeader } = require('../utils');
 
 const router = express.Router();
-const chat = require('../controllers/ChatController.js');
+const chat = require('../controllers/chat.js');
 router.use(checkHeader)
 
 router.post('/getUsersList', chat.getUsersList);

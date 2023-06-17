@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const RoomSettingsSchema = mongoose.Schema({
+const roomSettingsSchema = mongoose.Schema({
     roomid: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Room'
@@ -23,10 +23,10 @@ const RoomSettingsSchema = mongoose.Schema({
     }
 });
 
-RoomSettingsSchema.virtual('id').get(() => this._id);
+roomSettingsSchema.virtual('id').get(() => this._id);
 
-RoomSettingsSchema.set('toJSON', {
+roomSettingsSchema.set('toJSON', {
     virtuals: true,
 });
 
-module.exports = mongoose.model("room_settings", RoomSettingsSchema);
+module.exports = mongoose.model("room_settings", roomSettingsSchema);

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const RoomSchema = mongoose.Schema({
+const roomSchema = mongoose.Schema({
     members: [
         {
             type: String
@@ -26,10 +26,10 @@ const RoomSchema = mongoose.Schema({
     }
 });
 
-RoomSchema.virtual('id').get(() => this._id);
+roomSchema.virtual('id').get(() => this._id);
 
-RoomSchema.set('toJSON', {
+roomSchema.set('toJSON', {
     virtuals: true,
 });
 
-module.exports = mongoose.model("rooms", RoomSchema);
+module.exports = mongoose.model("rooms", roomSchema);

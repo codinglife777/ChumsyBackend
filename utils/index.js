@@ -1,11 +1,11 @@
-const UserCollection = require("../models/User")
+const UserCollection = require("../models/user")
 const MessageCollection = require("../models/Message")
 const RoomCollection = require("../models/Room")
 const UnreadMsgCollection = require("../models/UnreadMessages")
 const RoomSettingCollection = require("../models/RoomSettings")
 
 const getUser = async (userid = null) => {
-    var user = await UserCollection.find().select({ "fullname": 1, "avatar": 1, "birth": 1, "company": 1 }) || [];
+    var user = await UserCollection.find().select({ "fullname": 1, "avatar":1, "birth": 1, "company": 1}) || [];
     user = user.map(item => item._doc);
     if (!userid) return user;
 
@@ -50,15 +50,15 @@ const unreadMessages = async (userid, roomid) => {
     } else {
         var data = await getRoomByid(roomid)
         const users = data.members
-        if (users) {
+        if(users){
             return Promise.all(users.map(async userid => {
                 const count = await UnreadMsgCollection.find({ roomid, userid });
                 return { userid, count: count.length }
             }));
-        } else {
+        }else{
             return { userid, count: 0 }
         }
-
+        
     }
 }
 const readMessage = (userid, roomid) => {
@@ -101,7 +101,7 @@ const getMute = async (roomid, userid) => {
 const getRoomsByUser = async (userid) => {
     var rooms = await RoomCollection.find({
         members: { "$in": [userid] }
-    }).sort({ "_id": -1 });
+    }).sort( {"_id": -1 } );
     if (rooms?.length > 0) return rooms;
     return [];
 }
@@ -110,7 +110,7 @@ const getSupportRooms = async () => {
         members: { "$size": 2 },
         isgroup: true,
         product_id: { $gt: 0 },
-    }).sort({ "_id": -1 });
+    }).sort( {"_id": -1 } );
     if (rooms?.length > 0) return rooms;
     return [];
 }
